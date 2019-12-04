@@ -1,0 +1,5 @@
+setup.py
+src/scheduleloader.egg-info/PKG-INFO
+src/scheduleloader.egg-info/SOURCES.txt
+src/scheduleloader.egg-info/dependency_links.txt
+src/scheduleloader.egg-info/top_level.txt

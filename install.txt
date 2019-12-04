@@ -1,0 +1,6 @@
+pip install watchdog
+pip install pandas
+pip install xlrd
+pip install psycopg2
+
+# pip install -e . 
