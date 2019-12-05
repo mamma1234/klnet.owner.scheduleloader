@@ -2,6 +2,7 @@ pip install watchdog
 pip install pandas
 pip install xlrd
 pip install psycopg2
+pip install pgwrap
 
 # pip install -e . 
 # pip install -r requirements.txt

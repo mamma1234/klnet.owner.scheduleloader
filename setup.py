@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 VERSION = '1.0'
 DESCRIPTION = 'Service Sechedule Excel Loader'
-AUTHOR = 'Paul Daekyu, pdkship, mamma',
-AUTHOR_EMAIL = 'mamma1234@gmail.com',
-URL = 'https://github.com/mamma1234',
+AUTHOR = 'Paul Daekyu, pdkship, mamma'
+AUTHOR_EMAIL = 'mamma1234@gmail.com'
+URL = 'https://github.com/mamma1234'
 SRC_DIR = 'src'
 setup(name='scheduleloader', 
     version=VERSION, 

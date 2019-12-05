@@ -1,9 +1,10 @@
 from scheduleloader.polling import polling
 from scheduleloader.distribution import distribution
+from scheduleloader.about import about
+import pgwrap
 from threading import Thread
 import sys
 import time
-
 
 
 if __name__ == '__main__':

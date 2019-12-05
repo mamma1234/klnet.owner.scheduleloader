@@ -1,0 +1,4 @@
+watchdog==0.9.0
+pandas==0.25.3
+xlrd==1.2.0
+psycopg2==2.8.4
