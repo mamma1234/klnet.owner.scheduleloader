@@ -7,7 +7,7 @@ from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 from pathlib import Path
 import os
-from scheduleloader.polling import event
+import event
 import shutil
 
 
