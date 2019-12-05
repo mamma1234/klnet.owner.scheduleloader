@@ -1,0 +1,13 @@
+..\pgwrap\__init__.py
+..\pgwrap\__pycache__\__init__.cpython-38.pyc
+..\pgwrap\__pycache__\cli.cpython-38.pyc
+..\pgwrap\__pycache__\db.cpython-38.pyc
+..\pgwrap\__pycache__\sqlop.cpython-38.pyc
+..\pgwrap\cli.py
+..\pgwrap\db.py
+..\pgwrap\sqlop.py
+PKG-INFO
+SOURCES.txt
+dependency_links.txt
+requires.txt
+top_level.txt

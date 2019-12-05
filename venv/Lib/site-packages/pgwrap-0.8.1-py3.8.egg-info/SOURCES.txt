@@ -1,0 +1,12 @@
+README
+setup.cfg
+setup.py
+pgwrap/__init__.py
+pgwrap/cli.py
+pgwrap/db.py
+pgwrap/sqlop.py
+pgwrap.egg-info/PKG-INFO
+pgwrap.egg-info/SOURCES.txt
+pgwrap.egg-info/dependency_links.txt
+pgwrap.egg-info/requires.txt
+pgwrap.egg-info/top_level.txt
