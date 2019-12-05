@@ -1,11 +1,11 @@
 import psycopg2
 from psycopg2 import pool
 try:
-    postgreSQL_pool = psycopg2.pool.SimpleConnectionPool(1, 20,user = "postgres",
-                                              password = "pass@#29",
-                                              host = "127.0.0.1",
+    postgreSQL_pool = psycopg2.pool.SimpleConnectionPool(1, 20,user = "dev",
+                                              password = "dev",
+                                              host = "172.19.1.22",
                                               port = "5432",
-                                              database = "postgres_db")
+                                              database = "dev")
     if(postgreSQL_pool):
         print("Connection pool created successfully")
 
@@ -15,7 +15,7 @@ try:
     if(ps_connection):
         print("successfully recived connection from connection pool ")
         ps_cursor = ps_connection.cursor()
-        ps_cursor.execute("select * from mobile")
+        ps_cursor.execute("select * from snk_cargo_tracking")
         mobile_records = ps_cursor.fetchall()
 
         print ("Displaying rows from mobile table")
