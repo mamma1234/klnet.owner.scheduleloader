@@ -23,7 +23,7 @@ import filequeue
 
 def on_created(event):
     # print(f"hey, {event.event_type}:{event.src_path} has been created!")
-    # print(f"hey, {event} has been created!")
+    print(f"hey, {event} has been created!")
     
     # print("FileCreatedEvent", isinstance(event, FileCreatedEvent))
     

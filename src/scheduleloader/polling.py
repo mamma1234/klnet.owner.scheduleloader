@@ -42,11 +42,11 @@ def monitoring(path):
     observer.schedule(event_handler, path, recursive=True)
     observer.start()
 
-    print("path",path)
+    # print("path",path)
     # for root, dirs, files in os.walk(path):
     copypaths = []
     for dir in os.listdir(path):
-        print("dir", dir)
+        # print("dir", dir)
         # abspath = os.path.abspath(dir)
         # print("abspath", abspath)
         subdir = path +"/" + dir
@@ -54,10 +54,10 @@ def monitoring(path):
         if len(subfiles) > 0:
             copypaths.append(subdir)
     
-    print(copypaths)
+    # print(copypaths)
     if len(copypaths) > 0:
         for copypath in copypaths:
-            print("copy:", copypath)
+            # print("copy:", copypath)
             # shutil.copytree(copypath, f"{copypath}-Copy")
             shutil.move(copypath, f"{copypath}-Copy")
         # if os.path.isfile(path):

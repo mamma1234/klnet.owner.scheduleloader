@@ -29,6 +29,5 @@ def work(conn):
         # if(conn):
         #     conn.insert('own_vsl_sch', {'line_code':'tes3', 'vsl_code': 'vsl_code', 'in_voyage':'1234'})
 
-
-        time.sleep(5)
+        time.sleep(1)
 
