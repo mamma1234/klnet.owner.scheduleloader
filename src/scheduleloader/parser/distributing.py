@@ -4,26 +4,34 @@ import xlrd
 import os
 # import scheduleloader.parser
 
-from scheduleloader.parser.pil import pil_excelread
 from scheduleloader.parser.feo import feo_excelread
-from scheduleloader.parser.tsl.sally import tsl_sally_excelread
+from scheduleloader.parser.sfk import sfk_excelread
+from scheduleloader.parser.ial import ial_excelread
+# from scheduleloader.parser.pil import pil_excelread
+# from scheduleloader.parser.tsl.sally import tsl_sally_excelread
 
 
-def inspection(filename):
+def inspection(filepath):
     try:
         print("==============email address inspection=============")
+        filename = os.path.basename(filepath)
+        print(filename)
         temp = filename.split("^")
         print(temp[0])
-        temp = temp[0].split(os.path.sep)
-        print(temp[-1])
-        excel = xlrd.open_workbook(filename)
+        # temp = temp[0].split(os.path.sep)
+        # print(temp[-1])
+        excel = xlrd.open_workbook(filepath)
 
-        if "DHEKim@fesco.com" in temp[-1]:
+        if "DHEKim@fesco.com" in temp[0]:
             return feo_excelread.parser
-        elif "custsvc@pus.pilship.com" in temp[-1]:
-            return pil_excelread.parser
-        elif "sally@tslines.co.kr" in temp[-1]:
-            return tsl_sally_excelread.parser
+        elif "JayB@sofastkorea.com" in temp[0]:
+            return sfk_excelread.parser
+        elif "kelly.kim@interasialine.com" in temp[0]:
+            return ial_excelread.parser
+        # elif "custsvc@pus.pilship.com" in temp[0]:
+        #     return pil_excelread.parser
+        # elif "sally@tslines.co.kr" in temp[0]:
+        #     return tsl_sally_excelread.parser
     except Exception as identifier:
         pass
 

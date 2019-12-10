@@ -1,5 +1,5 @@
 from watchdog.events import FileMovedEvent, FileCreatedEvent
-import filequeue
+import config
 # modified_start = True
 
 # class EventHandler(FileSystemEventHandler):
@@ -29,7 +29,7 @@ def on_created(event):
     
     if isinstance(event, FileCreatedEvent):
         # print('file put waiting')
-        filequeue._queue.put(event._src_path)
+        config._queue.put(event._src_path)
     # print('all put waiting')
     # filequeue._queue.join()
     # print('put done')
@@ -51,7 +51,7 @@ def on_modified(event):
 def on_moved(event):
     # print(f"ok ok ok, someone moved {event.src_path} to {event.dest_path}")
     if isinstance(event, FileMovedEvent):
-        filequeue._queue.put(event.dest_path)
+        config._queue.put(event.dest_path)
     # print('put waiting')
     # filequeue._queue.join()
     # print('put done')

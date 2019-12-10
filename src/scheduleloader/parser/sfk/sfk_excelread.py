@@ -3,11 +3,10 @@ import re
 import xlrd
 
 """
-    FESCO(FEO:FSCO)
+    SOFAST(SFK:SFKL)
 """
 # _io = 'C:\\KLNET\\12월 9일자 스케줄.xlsx'
-
-line_code = "FEO"
+line_code = "SFK"
 
 class parser():
     def __init__(self, filename):
@@ -78,6 +77,7 @@ class parser():
         # print(data[0][3][1])
 
     def migration(self, excel):
+
         # print("length:", len(excel))
         data = [] #line_code, vessel_name, port_name, 
         for i in range(0, len(excel)):
@@ -87,93 +87,128 @@ class parser():
                     try:
                         # 각 선박/항차 별 엑셀 표의 시작 위치
                         if "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+2]):
-                            # print("start ================> ", i,":",j,":",k)
+                            print("start ================> ", i,":",j,":",k)
+                            data.extend(self.get_routes(excel, i,j,k))
+                        elif "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+1]):
+                            print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
                     except Exception as identifier:
                         print(identifier)
                         pass
         # print(data)
+
         return data
 
     def get_routes(self, excel, i, j, k):
         ports = {}
+        vessel_index = 0
+        voy_index = 0
+        port_start_index = 0
+        port_end_index = 0
+        row_start = j
+        row_end = 0
         routes = []
         # vessel        voy        port        date
         # print("continue ================> ", i,":",j,":",k)
         # endrow = 0
         # endcol = 0
-
-        for kk in range(k+3, len(excel[i][j])):
+        for kk in range(k, len(excel[i][j])):
             # print(i,":",j,":",kk,":",excel[i][j][kk])
             # if "" in str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]):
 
-            if "" != str(excel[i][j][kk]) and None != str(excel[i][j][kk]) and "*" not in str(excel[i][j][kk]):
-                ports[kk] = excel[i][j][kk]
+            if "VESSEL" in str(excel[i][j][kk]):
+                vessel_index = kk
 
-            if "" == str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]):
+            if "VOY" in str(excel[i][j][kk]):
+                voy_index = kk
+
+            if "" != str(excel[i][j][kk]) and None != str(excel[i][j][kk]) and "*" not in str(excel[i][j][kk]) and "VESSEL" not in str(excel[i][j][kk]) and "VOY" not in str(excel[i][j][kk]):
+                ports[str(kk)] = excel[i][j][kk]
+                if port_start_index == 0:
+                    port_start_index = kk
+
+            # print(">>>",str(excel[i][j][kk]),"<<<<")
+
+            if port_start_index > 0 and ("" == str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk])):
+                port_end_index = kk-1
+                print("end ================> ", i,":",j,":",kk)
                 break
             
-        # print("ports:", ports)
+            if kk == len(excel[i][j])-1:
+                port_end_index = kk
+                print("end ================> ", i,":",j,":",kk)
+
 
 
         for jj in range(j+1, len(excel[i])):
-            try:
+            outerbreak = False
+            for kk in range(vessel_index, port_end_index):
+                # if kk == vessel_index:
+                #     if "" == str(excel[i][jj][kk]) or None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]) :
+                #         row_end = jj
+                if kk == port_end_index-1:
+                    if "" == str(excel[i][jj][kk]) or None == str(excel[i][jj][kk]):
+                        row_end = jj-1
+                        outerbreak = True
+                        break
+
+            if outerbreak:
+                break
+            
+            row_end = jj
+
+        print("ports:", ports)
+        print("row_start:", row_start, "row_end:", row_end, "vessel_index:", vessel_index, "voy_index:", voy_index, "port_start_index:", port_start_index, "port_end_index:", port_end_index)
+
+
+        try:
+            # for jj in range(j+1, len(excel[i])):
+            vessel = ""
+            for jj in range(row_start+1, row_end+1):
                 outerbreak = False
-                vessel = ""
                 voy = ""
                 port = ""
                 seq = 0
-                # line_code = "FEO"
-                for kk in range(k, len(excel[i][jj])):
+                # line_code = "SFK"
+                # print("range:", list(range(len(excel[i][jj]))))
+                print("range:", list(range(vessel_index, port_end_index)))
+                for kk in range(vessel_index, port_end_index+1):
+                # for kk in range(len(excel[i][jj])):
                     # print(i,":",jj,":",kk,":",excel[i][jj][kk]) 
                     # if "" in str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]):
                     date = ""
-                    if kk == 1:
+                    if kk == vessel_index:
                         # if "" == str(excel[i][jj][kk]) or None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]):
                         # if None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]):
-                        if "*" in str(excel[i][jj][kk]):
-                            outerbreak = True
-                            break
+                        # if "" == str(excel[i][jj][kk]) or None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]) :
+                        #     outerbreak = True
+                        #     break
                         if "" != str(excel[i][jj][kk]):
                             vessel = excel[i][jj][kk]
-                    if kk == 3:
+                    if kk == voy_index:
                         # if "" == str(excel[i][jj][kk]) or None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]):
                         if "" != str(excel[i][jj][kk]):
                             voy = excel[i][jj][kk]
                             # print("route:", route)
 
-                    if kk > 3:
+                    if kk > port_start_index -1 and kk < port_end_index + 1 :
                         if "" != str(excel[i][jj][kk]) and "-" != str(excel[i][jj][kk]):
-                            # print("ports[kk]:", ports[kk])
-                            port = ports[kk]
+                            port = ports[str(kk)]
                             date = excel[i][jj][kk]
-                            # print("route:", route)
+                            # print("route:", {'line_code':line_code, 'vessel': vessel, 'voy': voy, 'port': port, 'date': date, 'seq':seq})
                             seq = seq + 1
                             routes.append({'line_code':line_code, 'vessel': vessel, 'voy': voy, 'port': port, 'date': date, 'seq':seq})
-                            # routes.append(route)
-                            # print("routes:", routes)
-                # print("route:", route)
-                # routes.append(route)
-                if outerbreak:
-                    break
-            except Exception as identifier:
-                print(identifier)
-                pass
+                            
+                            
+
+                
+
+                # if outerbreak:
+                #     # print("routes:", routes)
+                #     break
+
+        except Exception as identifier:
+            print('Exception:', identifier)
+            pass
+
         return routes
-        # print("routes:", routes)
-                        # goto stop
-            # if "" == str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]):
-            #     break
-            # ports.append({'port':excel[i][j][kk],'col':kk})
-
-        # print(ports)
-        # for jj in range(j, len(excel[i])):
-        #     print("continue ================> ", i,":",j,":",k)
-
-
-        #     for kk in range(k, len(excel[i][jj])):
-        #         if "" in str(excel[i][jj][kk]) or None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]):
-        #             endrow = jj
-        #             endcol = kk
-        #             print(i,":",jj,":",kk,":",excel[i][jj][kk]) 
-                    

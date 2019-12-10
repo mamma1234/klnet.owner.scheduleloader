@@ -1,3 +1,4 @@
+import config
 import sys
 import time
 import logging
@@ -25,7 +26,7 @@ import shutil
 # path = sys.argv[1] if len(sys.argv) > 1 else '.'
 # event_handler = LoggingEventHandler()
 
-def monitoring(path):
+def monitoring():
     # event_handler = EventHandler()
     # main_start = True
     patterns = "*"
@@ -39,18 +40,18 @@ def monitoring(path):
     # event_handler.on_modified = event.on_modified
     event_handler.on_moved = event.on_moved
     observer = Observer()
-    observer.schedule(event_handler, path, recursive=True)
+    observer.schedule(event_handler, config._path, recursive=True)
     observer.start()
 
     # print("path",path)
     # for root, dirs, files in os.walk(path):
     copypaths = []
-    for dir in os.listdir(path):
+    for dir in os.listdir(config._path):
         # print("dir", dir)
         # abspath = os.path.abspath(dir)
         # print("abspath", abspath)
-        subdir = path +"/" + dir
-        subfiles = os.listdir(path +"/" + dir)
+        subdir = config._path +"/" + dir
+        subfiles = os.listdir(config._path +"/" + dir)
         if len(subfiles) > 0:
             copypaths.append(subdir)
     
