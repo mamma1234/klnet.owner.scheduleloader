@@ -4,5 +4,9 @@ pip install xlrd
 pip install psycopg2
 pip install pgwrap
 
+# python -m pip install --upgrade pip
 # pip install -e . 
 # pip install -r requirements.txt
+
+# venv\Scripts\activate
+# python src/scheduleloader/main.py

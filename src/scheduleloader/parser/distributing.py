@@ -7,6 +7,8 @@ import os
 from scheduleloader.parser.feo import feo_excelread
 from scheduleloader.parser.sfk import sfk_excelread
 from scheduleloader.parser.ial import ial_excelread
+from scheduleloader.parser.apl import apl_excelread
+from scheduleloader.parser.one import one_excelread
 # from scheduleloader.parser.pil import pil_excelread
 # from scheduleloader.parser.tsl.sally import tsl_sally_excelread
 
@@ -28,6 +30,14 @@ def inspection(filepath):
             return sfk_excelread.parser
         elif "kelly.kim@interasialine.com" in temp[0]:
             return ial_excelread.parser
+        elif "seulgi.park@apl.com" in temp[0]:
+            return apl_excelread.parser
+        elif "kr.bpit@one-line.com" in temp[0]:
+            return one_excelread.parser
+        # elif "custsvc@pus.pilship.com" in temp[0]:
+        #     return pil_excelread.parser
+
+            
         # elif "custsvc@pus.pilship.com" in temp[0]:
         #     return pil_excelread.parser
         # elif "sally@tslines.co.kr" in temp[0]:

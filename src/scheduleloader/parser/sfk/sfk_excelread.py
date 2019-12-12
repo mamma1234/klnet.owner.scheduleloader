@@ -6,14 +6,18 @@ import xlrd
     SOFAST(SFK:SFKL)
 """
 # _io = 'C:\\KLNET\\12월 9일자 스케줄.xlsx'
-line_code = "SFK"
 
 class parser():
+
+    _line_code = "SFK"
+    _sheets = []
+    _filename = None
+
     def __init__(self, filename):
-        self.filename = filename
+        self._filename = filename
 
     def parsing(self):
-        excel = xlrd.open_workbook(self.filename)
+        excel = xlrd.open_workbook(self._filename)
 
         # print(len(excel.sheets()))
 
@@ -54,7 +58,7 @@ class parser():
 
 
     def parsing1(self):
-        excel = xlrd.open_workbook(self.filename)
+        excel = xlrd.open_workbook(self._filename)
 
         # print(len(excel.sheets()))
 
@@ -171,7 +175,7 @@ class parser():
                 seq = 0
                 # line_code = "SFK"
                 # print("range:", list(range(len(excel[i][jj]))))
-                print("range:", list(range(vessel_index, port_end_index)))
+                print("range:", list(range(vessel_index, port_end_index+1)))
                 for kk in range(vessel_index, port_end_index+1):
                 # for kk in range(len(excel[i][jj])):
                     # print(i,":",jj,":",kk,":",excel[i][jj][kk]) 
@@ -197,7 +201,7 @@ class parser():
                             date = excel[i][jj][kk]
                             # print("route:", {'line_code':line_code, 'vessel': vessel, 'voy': voy, 'port': port, 'date': date, 'seq':seq})
                             seq = seq + 1
-                            routes.append({'line_code':line_code, 'vessel': vessel, 'voy': voy, 'port': port, 'date': date, 'seq':seq})
+                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'port': port, 'date': date, 'seq':seq})
                             
                             
 

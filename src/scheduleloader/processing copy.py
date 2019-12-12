@@ -16,7 +16,6 @@ def work():
 
     # pool = datasource.simpleconnectionpool()
     filepath = ""
-    filename = ""
     while True:
 
         try:
@@ -24,7 +23,6 @@ def work():
             print("size:", config._queue.qsize())
             # for i in range(5):
             filepath = config._queue.get()
-            filename = os.path.basename(filepath)
             # print(obj)
             print('----------------------------------------------------------')
             print("filepath:",filepath)
@@ -56,30 +54,15 @@ def work():
                 #                     insert into own_vsl_sch_route (line_code, vsl_name, voyage, route_seq, route_code, eta) select * from ins
                 # """
 
-                # sql = """insert into own_vsl_sch_route(line_code, vsl_name, voyage, route_seq, route_code, eta, ts_yn) 
-                #             values (trim(%(line_code)s),trim(%(vessel)s),trim(%(voy)s),%(seq)s,
-                #                     (select iso_port_code from own_vsl_sch_iso_port_code 
-                #                         where line_code = trim(%(line_code)s) and port_name = trim(%(port)s)),
-                #                     trim(%(date)s), 'N')
-                #         on conflict(line_code, vsl_name, voyage, route_seq)
-                #         do update set route_code = (select iso_port_code from own_vsl_sch_iso_port_code 
-                #                                         where line_code = trim(%(line_code)s) and port_name = trim(%(port)s))
-                #                         , eta = trim(%(date)s)"""
-
-                
-
-                sql = f"""insert into own_vsl_sch_route_list(line_code, vsl_name, voyage, route_date, route_code, route_name, ts_yn, insert_user) 
-                            values (trim(%(line_code)s),trim(%(vessel)s),trim(%(voy)s),trim(%(date)s),
+                sql = """insert into own_vsl_sch_route(line_code, vsl_name, voyage, route_seq, route_code, eta, ts_yn) 
+                            values (trim(%(line_code)s),trim(%(vessel)s),trim(%(voy)s),%(seq)s,
                                     (select iso_port_code from own_vsl_sch_iso_port_code 
                                         where line_code = trim(%(line_code)s) and port_name = trim(%(port)s)),
-                                    trim(%(port)s), 'N', trim('{filename}'))
-                        on conflict(line_code, vsl_name, voyage, route_date)
+                                    trim(%(date)s), 'N')
+                        on conflict(line_code, vsl_name, voyage, route_seq)
                         do update set route_code = (select iso_port_code from own_vsl_sch_iso_port_code 
                                                         where line_code = trim(%(line_code)s) and port_name = trim(%(port)s))
-                                      , route_name = trim(%(port)s)
-                                      , insert_user = trim('{filename}')"""
-
-
+                                        , eta = trim(%(date)s)"""
 
                 conn = datasource.connect()
                 cur = conn.cursor()

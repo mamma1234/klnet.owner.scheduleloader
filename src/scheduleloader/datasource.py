@@ -3,7 +3,7 @@ import psycopg2
 # conn = pgwrap.connection(url='postgres://dev:dev@172.19.1.22:5432/dev')
 
 def simpleconnectionpool():
-    pool = psycopg2.pool.SimpleConnectionPool(1, 20, user="dev", password="dev", host="172.19.1.22", port="5432", database="dev")
+    pool = psycopg2.pool.SimpleConnectionPool(1, 10, user="dev", password="dev", host="172.19.1.22", port="5432", database="dev")
 
     return pool
 
