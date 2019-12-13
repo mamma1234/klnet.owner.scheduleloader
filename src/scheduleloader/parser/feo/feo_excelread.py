@@ -1,7 +1,7 @@
 import pandas
 import re
 import xlrd
-
+import traceback
 """
     FESCO(FEO:FSCO)
 """
@@ -91,6 +91,7 @@ class parser():
                             data.extend(self.get_routes(excel, i,j,k))
                     except Exception as identifier:
                         print(identifier)
+                        traceback.print_exc()
                         pass
         # print(data)
         return data
@@ -109,7 +110,7 @@ class parser():
 
             if "" != str(excel[i][j][kk]) and None != str(excel[i][j][kk]) and "*" not in str(excel[i][j][kk]):
                 ports[str(kk)] = excel[i][j][kk]
-                if "\n" in ports[kk]:
+                if "\n" in ports[str(kk)]:
                     ports[str(kk)] = ports[str(kk)].replace("\n"," ")
 
             if "" == str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]):
@@ -161,6 +162,7 @@ class parser():
                     break
             except Exception as identifier:
                 print(identifier)
+                traceback.print_exc()
                 pass
         return routes
         # print("routes:", routes)

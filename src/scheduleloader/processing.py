@@ -84,7 +84,7 @@ def work():
                 cur.executemany(sql, param)
                 conn.commit()
                 
-                # success(filepath)
+                success(filepath)
 
 
                 print('success')
@@ -115,7 +115,7 @@ def work():
 
 
         except Exception as identifier:
-            # fail(filepath)
+            fail(filepath)
             print("Processing Exception:", identifier)
             pass
         

@@ -254,7 +254,7 @@ class parser():
                 and "VESSEL" not in str(excel[i][j][kk]) and "VOY" not in str(excel[i][j][kk]) \
                 and "Vessel" not in str(excel[i][j][kk]) :
                 ports[str(kk)] = excel[i][j][kk]
-                if "\n" in ports[kk]:
+                if "\n" in ports[str(kk)]:
                     ports[str(kk)] = ports[str(kk)].replace("\n"," ")
                 if port_start_index == -1:
                     port_start_index = kk
