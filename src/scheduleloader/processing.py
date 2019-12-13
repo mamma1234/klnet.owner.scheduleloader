@@ -70,13 +70,11 @@ def work():
 
                 sql = f"""insert into own_vsl_sch_route_list(line_code, vsl_name, voyage, route_date, route_code, route_name, ts_yn, insert_user) 
                             values (trim(%(line_code)s),trim(%(vessel)s),trim(%(voy)s),trim(%(date)s),
-                                    (select iso_port_code from own_vsl_sch_iso_port_code 
-                                        where line_code = trim(%(line_code)s) and port_name = trim(%(port)s)),
+                                    COALESCE((select iso_port_code from own_vsl_sch_iso_port_code 
+                                                where line_code = trim(%(line_code)s) and port_name = trim(%(port)s)),'None'),
                                     trim(%(port)s), 'N', trim('{filename}'))
-                        on conflict(line_code, vsl_name, voyage, route_date)
-                        do update set route_code = (select iso_port_code from own_vsl_sch_iso_port_code 
-                                                        where line_code = trim(%(line_code)s) and port_name = trim(%(port)s))
-                                      , route_name = trim(%(port)s)
+                        on conflict(line_code, vsl_name, voyage, route_date, route_code)
+                        do update set route_name = trim(%(port)s)
                                       , insert_user = trim('{filename}')"""
 
 

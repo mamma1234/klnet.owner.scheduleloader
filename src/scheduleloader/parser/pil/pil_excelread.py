@@ -11,7 +11,7 @@ PACIFIC, MARIANA
 # _io = 'C:\\KLNET\\12월 9일자 스케줄.xlsx'
 
 class parser():
-    _line_code = "PIL"
+    _line_code = "PIL"  #"MEL"
     _sheets = []
     _filename = None
     def __init__(self, filename):
@@ -31,7 +31,7 @@ class parser():
         try:
             
             # for sheet_index in range(0, len(excel.sheets())):
-            for sheet_index in range(0, 1):
+            for sheet_index in range(0, 2):
                 # print("sheet_index:", sheet_index)
                 sheet = excel.sheet_by_index(sheet_index)
                 self._sheets.append(sheet)
@@ -139,18 +139,40 @@ class parser():
         print("length:", len(excel))
         data = [] #line_code, vessel_name, port_name, 
         for i in range(0, len(excel)):
+
+            self._line_code = "PIL"
+            try:
+                if "pilship" in excel[i][1][3]:
+                    print(excel[i][1][3])
+                    self._line_code = "PIL"
+                elif "mellship" in excel[i][4][1]:
+                    print(excel[i][4][1])
+                    self._line_code = "MEL"
+            except Exception as identifier:
+                print('Exception:', identifier)
+                pass
+
+            # www.pilship.com
+            # www.mellship.com
+
             for j in range(0, len(excel[i])):
                 for k in range(0, len(excel[i][j])):
                     # print(i,":",j,":",k,":",excel[i][j][k])
                     try:
                         # 각 선박/항차 별 엑셀 표의 시작 위치
-                        if "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+2]):
+                        if "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+3]):
+                            print("start ================> ", i,":",j,":",k)
+                            data.extend(self.get_routes(excel, i,j,k))
+                        elif "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+2]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
                         elif "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+1]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
                         elif "VESSEL / VOYAGE" in str(excel[i][j][k]):
+                            print("start ================> ", i,":",j,":",k)
+                            data.extend(self.get_routes(excel, i,j,k))
+                        elif "VSL/VOY" in str(excel[i][j][k]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
                     except Exception as identifier:
@@ -173,6 +195,9 @@ class parser():
         # print("continue ================> ", i,":",j,":",k)
         # endrow = 0
         # endcol = 0
+
+
+
         for kk in range(k, len(excel[i][j])):
 
             # print("merge is:",self.is_merge(j, kk))
@@ -183,6 +208,11 @@ class parser():
             # if "VESSEL / VOYAGE" in str(excel[i][j][kk]):
             #     vessel_index = kk
             #     voy_index = kk+2
+
+            if "VSL/VOY" in str(excel[i][j][kk]):
+                 vessel_index = kk
+                 voy_index = kk
+
             if "VESSEL" in str(excel[i][j][kk]):
                 vessel_index = kk
 
@@ -192,16 +222,23 @@ class parser():
             # if "" != str(excel[i][j][kk]) and None != str(excel[i][j][kk]) and "*" not in str(excel[i][j][kk]) and "VESSEL / VOYAGE" not in str(excel[i][j][kk]):
             if "" != str(excel[i][j][kk]) and None != str(excel[i][j][kk]) and "*" not in str(excel[i][j][kk]) and "VESSEL" not in str(excel[i][j][kk]) and "VOY" not in str(excel[i][j][kk]):
                 ports[str(kk)] = excel[i][j][kk]
+                if "\n" in ports[kk]:
+                    ports[str(kk)] = ports[str(kk)].replace("\n"," ")
                 if port_start_index == 0:
                     port_start_index = kk
 
             # print(">>>",str(excel[i][j][kk]),"<<<<")
 
-            if port_start_index > 0 and ("" == str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk])):
+            if port_start_index > 0 and not self.is_merge(i, j, kk) and ("" == str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk])):
                 port_end_index = kk-1
                 print("end ================> ", i,":",j,":",kk)
                 break
             
+            if "WEEKLY" in str(excel[i][j][kk]):
+                port_end_index = kk-1
+                print("end ================> ", i,":",j,":",kk)
+                break
+
             if kk == len(excel[i][j])-1:
                 port_end_index = kk
                 print("end ================> ", i,":",j,":",kk)
@@ -258,6 +295,15 @@ class parser():
                     # print(i,":",jj,":",kk,":",excel[i][jj][kk]) 
                     # if "" in str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]):
                     date = ""
+                    if kk == vessel_index and kk == voy_index:
+                        if "" != str(excel[i][jj][kk]):
+                            tmp = str(excel[i][jj][kk])
+                            if " " in tmp:
+                                tmps = tmp.rsplit(" ", 1)
+                                vessel = tmps[0]
+                                voy = tmps[1]
+                                continue
+
                     if kk == vessel_index:
                         # if "" == str(excel[i][jj][kk]) or None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]):
                         # if None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]):
@@ -266,16 +312,34 @@ class parser():
                         #     break
                         if "" != str(excel[i][jj][kk]):
                             vessel = excel[i][jj][kk]
+                            continue
+
                     if kk == voy_index:
                         # if "" == str(excel[i][jj][kk]) or None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]):
                         if "" != str(excel[i][jj][kk]):
                             voy = excel[i][jj][kk]
                             # print("route:", route)
+                            continue
 
                     if kk > port_start_index -1 and kk < port_end_index + 1 :
-                        if "" != str(excel[i][jj][kk]) and "-" != str(excel[i][jj][kk]):
+                        # if self.is_merge_extend(i, jj, kk):
+                        #     print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",i, jj, kk)
+                        #     print(self.get_merge_data(excel, i, jj, kk))
+                        is_merge = False
+                        if self._line_code == "MEL":
+                            is_merge = self.is_merge_extend(i, jj, kk)
+
+                        if ("" != str(excel[i][jj][kk]) and "-" != str(excel[i][jj][kk])) or is_merge:
                             port = ports[str(kk)]
                             date = excel[i][jj][kk]
+                            if "" == date and self._line_code == "MEL" and is_merge:
+                                date = self.get_merge_data(excel, i, jj, kk)
+                                if ("" == str(date) or "-" == str(date)):
+                                    continue
+                            
+                            if "-" == date:
+                                continue
+
 
                             if "~" in date:
                                 tmp = date.split('~')
@@ -306,19 +370,69 @@ class parser():
 
         return routes
 
-    def is_merge(self, row, col):
-        print(row,"," ,col)
-        # print(self.sheet.merged_cells)
+    def is_merge(self, i, row, col):
+        # print(row,"," ,col)
+        # print(self._sheets[i].merged_cells)
         # print("crange", crange)
 
-        for sheet in self._sheets:
-            for crange in sheet.merged_cells:
-                rlo, rhi, clo, chi = crange
-                for rowx in range(rlo,rhi):
-                    for colx in range(clo, chi):
-                        # print(rowx, colx)
-                        if row == rowx and col == colx:
-                            return True
+        for crange in self._sheets[i].merged_cells:
+            rlo, rhi, clo, chi = crange
+            for rowx in range(rlo,rhi):
+                for colx in range(clo, chi):
+                    # print(rowx, colx)
+                    if row == rowx and col == colx:
+                        # print(i, row, col, "crange:",crange, row, rowx, col, colx)
+                        return True
+
         return False
 
+    def is_merge_extend(self, i, row, col):
+        # print(row,"," ,col)
+        # print(self._sheets[i].merged_cells)
+        # print("crange", crange)
 
+# 0 : 76 : 3 : CGP
+# 0 76 3 crange: (76, 77, 3, 5) 76 76 3 3
+
+        for crange in self._sheets[i].merged_cells:
+            rlo, rhi, clo, chi = crange
+            if rlo <= row and rhi-1 >= row and clo <= col and chi-1 >= col:
+                # print(i, row, col, "crange:",crange)
+                return True
+        return False
+
+    def get_merge_data(self, excel, i, row, col):
+        # print(row,"," ,col)
+        # print(self._sheets[i].merged_cells)
+        # print("crange", crange)
+
+# 0 : 76 : 3 : CGP
+# 0 76 3 crange: (76, 77, 3, 5) 76 76 3 3
+
+        for crange in self._sheets[i].merged_cells:
+            rlo, rhi, clo, chi = crange
+            if rlo <= row and rhi-1 >= row and clo <= col and chi-1 >= col:
+                # print(i, row, col, "crange:",crange, rlo, clo)
+                return excel[i][rlo][clo]
+                # if rlo == row and clo == col:
+                #     return rlo, clo
+                # else:
+                #     return rlo, clo
+                # return True
+        return None
+
+    def get_merge(self, i, row, col):
+        # print(row,"," ,col)
+        # print(self._sheets[i].merged_cells)
+        # print("crange", crange)
+
+        for crange in self._sheets[i].merged_cells:
+            rlo, rhi, clo, chi = crange
+            for rowx in range(rlo,rhi):
+                for colx in range(clo, chi):
+                    # print(rowx, colx)
+                    if row == rowx and col == colx:
+                        # print(i, row, col, "crange:",crange, row, rowx, col, colx)
+                        return crange
+
+        return False

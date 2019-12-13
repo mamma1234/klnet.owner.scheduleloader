@@ -191,6 +191,8 @@ class parser():
             # if "" != str(excel[i][j][kk]) and None != str(excel[i][j][kk]) and "*" not in str(excel[i][j][kk]) and "VESSEL / VOYAGE" not in str(excel[i][j][kk]):
             if "" != str(excel[i][j][kk]) and None != str(excel[i][j][kk]) and "*" not in str(excel[i][j][kk]) and "VESSEL" not in str(excel[i][j][kk]) and "VOY" not in str(excel[i][j][kk]):
                 ports[str(kk)] = excel[i][j][kk]
+                if "\n" in ports[kk]:
+                    ports[str(kk)] = ports[str(kk)].replace("\n"," ")
                 if port_start_index == 0:
                     port_start_index = kk
 

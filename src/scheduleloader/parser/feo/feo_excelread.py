@@ -108,7 +108,9 @@ class parser():
             # if "" in str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]):
 
             if "" != str(excel[i][j][kk]) and None != str(excel[i][j][kk]) and "*" not in str(excel[i][j][kk]):
-                ports[kk] = excel[i][j][kk]
+                ports[str(kk)] = excel[i][j][kk]
+                if "\n" in ports[kk]:
+                    ports[str(kk)] = ports[str(kk)].replace("\n"," ")
 
             if "" == str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]):
                 break
@@ -147,6 +149,7 @@ class parser():
                             # print("ports[kk]:", ports[kk])
                             port = ports[kk]
                             date = excel[i][jj][kk]
+
                             # print("route:", route)
                             seq = seq + 1
                             routes.append({'line_code':line_code, 'vessel': vessel, 'voy': voy, 'port': port, 'date': date, 'seq':seq})

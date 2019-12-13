@@ -9,8 +9,10 @@ from scheduleloader.parser.sfk import sfk_excelread
 from scheduleloader.parser.ial import ial_excelread
 from scheduleloader.parser.apl import apl_excelread
 from scheduleloader.parser.one import one_excelread
-# from scheduleloader.parser.pil import pil_excelread
-# from scheduleloader.parser.tsl.sally import tsl_sally_excelread
+from scheduleloader.parser.pil import pil_excelread
+# from scheduleloader.parser.mel import mel_excelread
+from scheduleloader.parser.msc import msc_excelread
+from scheduleloader.parser.tsl.sally import tsl_sally_excelread
 
 
 def inspection(filepath):
@@ -24,6 +26,9 @@ def inspection(filepath):
         # print(temp[-1])
         excel = xlrd.open_workbook(filepath)
 
+        if "IMPORT" in temp[1]:
+            return None
+
         if "DHEKim@fesco.com" in temp[0]:
             return feo_excelread.parser
         elif "JayB@sofastkorea.com" in temp[0]:
@@ -34,8 +39,14 @@ def inspection(filepath):
             return apl_excelread.parser
         elif "kr.bpit@one-line.com" in temp[0]:
             return one_excelread.parser
+        elif "custsvc@pus.pilship.com" in temp[0]:
+            return pil_excelread.parser
         # elif "custsvc@pus.pilship.com" in temp[0]:
-        #     return pil_excelread.parser
+        #     return mel_excelread.parser
+        elif "seongjun.cheon@msc.com" in temp[0]:
+            return msc_excelread.parser
+        elif "sally@tslines.co.kr" in temp[0]:
+            return tsl_sally_excelread.parser
 
             
         # elif "custsvc@pus.pilship.com" in temp[0]:
