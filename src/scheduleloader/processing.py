@@ -68,14 +68,33 @@ def work():
 
                 
 
-                sql = f"""insert into own_vsl_sch_route_list(line_code, vsl_name, voyage, route_date, route_code, route_name, ts_yn, insert_user) 
-                            values (trim(%(line_code)s),trim(%(vessel)s),trim(%(voy)s),trim(%(date)s),
+                # sql = f"""insert into own_vsl_sch_route_list(line_code, vsl_name, voyage, route_date, route_code, route_name, ts_yn, insert_user) 
+                #             values (trim(%(line_code)s),trim(%(vessel)s),trim(%(voy)s),trim(%(date)s),
+                #                     COALESCE((select iso_port_code from own_vsl_sch_iso_port_code 
+                #                                 where line_code = trim(%(line_code)s) and port_name = trim(%(port)s)),'None'),
+                #                     trim(%(port)s), 'N', trim('{filename}'))
+                #         on conflict(line_code, vsl_name, voyage, route_date, route_code)
+                #         do update set route_name = trim(%(port)s)
+                #                       , insert_user = trim('{filename}')"""
+
+                sql = f"""insert into own_vsl_sch_route_list(line_code, vsl_name, voyage, 
+                            start_route_date, start_route_code, start_route_name, 
+                            end_route_date, end_route_code, end_route_name, 
+                            ts_yn, insert_user) 
+                            values (trim(%(line_code)s),trim(%(vessel)s),trim(%(voy)s),
+                                    trim(%(start_route_date)s),
                                     COALESCE((select iso_port_code from own_vsl_sch_iso_port_code 
-                                                where line_code = trim(%(line_code)s) and port_name = trim(%(port)s)),'None'),
-                                    trim(%(port)s), 'N', trim('{filename}'))
-                        on conflict(line_code, vsl_name, voyage, route_date, route_code)
-                        do update set route_name = trim(%(port)s)
-                                      , insert_user = trim('{filename}')"""
+                                                where line_code = trim(%(line_code)s) and port_name = trim(%(start_route_name)s)),'None'),
+                                    trim(%(start_route_name)s), 
+                                    trim(%(end_route_date)s),
+                                    COALESCE((select iso_port_code from own_vsl_sch_iso_port_code 
+                                                where line_code = trim(%(line_code)s) and port_name = trim(%(end_route_name)s)),'None'),
+                                    trim(%(end_route_name)s), 
+                                    'N', trim('{filename}'))
+                        on conflict(line_code, vsl_name, voyage, start_route_date, start_route_code, end_route_date, end_route_code)
+                        do update set start_route_name = trim(%(start_route_name)s)
+                                    , end_route_name = trim(%(end_route_name)s)
+                                    , insert_user = trim('{filename}')"""
 
 
 

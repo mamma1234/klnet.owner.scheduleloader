@@ -337,6 +337,7 @@ class parser():
                 outerbreak = False
                 voy = ""
                 port = ""
+                date = ""
                 seq = 0
                 # line_code = "SFK"
                 # print("range:", list(range(len(excel[i][jj]))))
@@ -345,7 +346,7 @@ class parser():
                 # for kk in range(len(excel[i][jj])):
                     # print(i,":",jj,":",kk,":",excel[i][jj][kk]) 
                     # if "" in str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]):
-                    date = ""
+
                     if kk == vessel_index and kk == voy_index:
                         if "" != str(excel[i][jj][kk]):
                             tmp = str(excel[i][jj][kk])
@@ -379,35 +380,45 @@ class parser():
 
 
                         if "" != str(excel[i][jj][kk]) and "-" != str(excel[i][jj][kk]):
-                            port = ports[str(kk)]
-                            date = excel[i][jj][kk]  
+                            end_port = ports[str(kk)]
+                            end_date = excel[i][jj][kk] 
+                            start_port = ""
+                            start_date = ""
                             # print("original:", date)
-                            if "-" == date:
+                            if "-" == end_date:
                                 continue
 
-                            if "~" in date:
-                                tmp = date.split('~')
+                            if "~" in end_date:
+                                tmp = end_date.split('~')
                                 if "/" in tmp[0]:
                                     # print("tmp:",tmp[0], ":", tmp[0].strip(), ":")
                                     # print(datetime.datetime.strptime(f"{datetime.datetime.now().year}{tmp[0].strip()}", "%Y%m/%d"))
-                                    date = datetime.datetime.strptime(f"{datetime.datetime.now().year}{tmp[0].strip()}", "%Y%m/%d").strftime("%Y%m%d")
-                            elif "-" in date:
-                                tmp = date.split('-')
+                                    end_date = datetime.datetime.strptime(f"{datetime.datetime.now().year}{tmp[0].strip()}", "%Y%m/%d").strftime("%Y%m%d")
+                            elif "-" in end_date:
+                                tmp = end_date.split('-')
                                 if "/" in tmp[0]:
-                                    date = datetime.datetime.strptime(f"{datetime.datetime.now().year}{tmp[0].strip()}", "%Y%m/%d").strftime("%Y%m%d")
-                            elif "/" in date:
-                                tmp = date
-                                date = datetime.datetime.strptime(f"{datetime.datetime.now().year}{tmp.strip()}", "%Y%m/%d").strftime("%Y%m%d")
+                                    end_date = datetime.datetime.strptime(f"{datetime.datetime.now().year}{tmp[0].strip()}", "%Y%m/%d").strftime("%Y%m%d")
+                            elif "/" in end_date:
+                                tmp = end_date
+                                end_date = datetime.datetime.strptime(f"{datetime.datetime.now().year}{tmp.strip()}", "%Y%m/%d").strftime("%Y%m%d")
                             # print("route:", {'line_code':line_code, 'vessel': vessel, 'voy': voy, 'port': port, 'date': date, 'seq':seq})
                             
-                            if len(date) > 8:
-                                date = date[:8]
+                            if len(end_date) > 8:
+                                end_date = end_date[:8]
 
+                            if "" != date:
+                                start_port = port
+                                start_date = date
+                            else:
+                                start_port = end_port
+                                start_date = end_date
 
                             seq = seq + 1
-                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'port': port, 'date': date, 'seq':seq})
-                            
-                
+                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq})
+
+                            port = end_port                            
+                            date = end_date
+
 
                 # if outerbreak:
                 #     # print("routes:", routes)
