@@ -26,7 +26,7 @@ import shutil
 # path = sys.argv[1] if len(sys.argv) > 1 else '.'
 # event_handler = LoggingEventHandler()
 
-def monitoring():
+def work():
     # event_handler = EventHandler()
     # main_start = True
     patterns = "*"
