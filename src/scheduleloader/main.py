@@ -21,16 +21,16 @@ if __name__ == '__main__':
         mailling_work.start()
  
     
-        # polling_work = Thread(target=polling.work)
-        # polling_work.daemon=True
-        # polling_work.start()
+        polling_work = Thread(target=polling.work)
+        polling_work.daemon=True
+        polling_work.start()
  
         # conn = pgwrap.connection(url='postgres://dev:dev@172.19.1.22:5432/dev')
 
         # process_work = Thread(target=processing.work, args=(conn,))
-        # process_work = Thread(target=processing.work)
-        # process_work.daemon=True
-        # process_work.start()
+        process_work = Thread(target=processing.work)
+        process_work.daemon=True
+        process_work.start()
         while True:
             # print("size:", filequeue._queue.qsize())
             time.sleep(1)

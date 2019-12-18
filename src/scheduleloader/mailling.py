@@ -162,7 +162,7 @@ def work():
       except Exception as identifier:
          print("mailling Exception:", identifier)
          traceback.print_exc()
-         pass
+         # pass
 
       time.sleep(10)
 
