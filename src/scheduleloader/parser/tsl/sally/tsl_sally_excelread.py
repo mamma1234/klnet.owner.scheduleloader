@@ -416,7 +416,7 @@ class parser():
                             seq = seq + 1
                             routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq})
 
-                            port = end_port                            
+                            port = end_port
                             date = end_date
 
 
