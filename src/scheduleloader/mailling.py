@@ -114,7 +114,7 @@ def work():
          server.user(config._mail_user)
          server.pass_(config._mail_pass)
 
-
+         print('mail listening')
          for i in range(0, len(server.list()[1])):
             print('***************************************************************************************')
             print('mail count:',i)

@@ -4,9 +4,88 @@ pip install xlrd
 pip install psycopg2
 pip install pgwrap
 
+
+
+
+
+pip install --upgrade setuptools
+
+
+source klnet.owner.scheduleloader/bin/activate
+sudo pip install --upgrade pip
+sudo pip install -e .
+
 # python -m pip install --upgrade pip
 # pip install -e . 
 # pip install -r requirements.txt
 
+
+# cmd console 창으로 실행
 # venv\Scripts\activate
 # python src/scheduleloader/main.py
+
+
+source venv/bin/activate
+
+# [root@owner bin]# pwd
+# /root/bin
+# [root@owner bin]# ls -al
+# 합계 4
+# drwxr-xr-x. 2 root root   21 12월 19 12:01 .
+# drwxrwxrwx. 9 root root 4096  2월 20 16:09 ..
+# lrwxrwxrwx. 1 ebiz ebiz   30 12월 19 12:01 python3 -> /home/ebiz/Python-3.8.0/python
+
+
+
+
+
+
+
+ln -s /usr/local/bin/python3.8 python3a
+ln -s /home/ebiz/Python-3.8.0/python python3b
+ln -s /home/ebiz/Python-3.8.1/python python3c
+
+
+ln -s /home/ebiz/Python-3.8.1/python python3 
+
+
+
+
+
+
+#### CentOS 7 Python 3.8
+
+sudo yum -y groupinstall "Development Tools:
+sudo yum -y install openssl-devel bzip2-devel libffi-devel
+gcc --version
+
+sudo yum -y install wget
+wget https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tgz
+
+targ xvf Python-3.8.1.tgz
+
+cd Python-3.8*/
+
+./configure --enable-optimizations
+
+sudo make altinstall
+
+python3.8 --vertion
+
+pip3.8 --version
+
+
+
+python3 -m venv klnet.owner.scheduleloader
+
+source bin/activate
+
+pip install watchdog
+pip install pandas
+pip install xlrd
+pip install psycopg2
+pip install pgwrap
+
+pip install -e . 
+
+python src/scheduleloader/main.py
