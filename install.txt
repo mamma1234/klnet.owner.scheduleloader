@@ -70,10 +70,11 @@ cd Python-3.8*/
 
 sudo make altinstall
 
-python3.8 --vertion
+python3.8 --version
 
 pip3.8 --version
 
+python --version
 
 
 python3 -m venv klnet.owner.scheduleloader
@@ -88,4 +89,8 @@ pip install pgwrap
 
 pip install -e . 
 
-python src/scheduleloader/main.py
+python3 src/scheduleloader/main.py
+
+nohup python3 src/scheduleloader/main.py &
+
+tail -f nohup.out
