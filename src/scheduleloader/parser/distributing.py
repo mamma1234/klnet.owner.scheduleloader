@@ -13,7 +13,7 @@ from scheduleloader.parser.pil import pil_excelread
 # from scheduleloader.parser.mel import mel_excelread
 from scheduleloader.parser.msc import msc_excelread
 from scheduleloader.parser.tsl.sally import tsl_sally_excelread
-
+from scheduleloader.parser.emc import emc_excelread
 
 def inspection(filepath):
     try:
@@ -47,6 +47,8 @@ def inspection(filepath):
             return msc_excelread.parser
         elif "sally@tslines.co.kr" in temp[0]:
             return tsl_sally_excelread.parser
+        elif "ellenyoun@evergreen-shipping.co.kr" in temp[0]:
+            return emc_excelread.parser
 
             
         # elif "custsvc@pus.pilship.com" in temp[0]:
