@@ -79,6 +79,8 @@ class parser():
                                     cols.append(value)
                                 except BaseException as error:
                                     value = sheet.cell(rowx=row_index,colx=col_index).value
+                                    if isinstance(value, float):
+                                        value = int(round(value))                                    
                                     cols.append(value)
                             # print("date value", value)
                             else:
@@ -171,10 +173,12 @@ class parser():
         row_start = j
         row_end = 0
         routes = []
+        svc = ""
         # vessel        voy        port        date
         # print("continue ================> ", i,":",j,":",k)
         # endrow = 0
         # endcol = 0
+        svc = excel[i][j-1][k]
         for kk in range(k, len(excel[i][j])):
 
             # print("merge is:",self.is_merge(j, kk))
@@ -279,9 +283,15 @@ class parser():
                     if kk > port_start_index -1 and kk < port_end_index + 1 :
                         if "" != str(excel[i][jj][kk]) and "-" != str(excel[i][jj][kk]):
                             end_port = ports[str(kk)]
-                            end_date = excel[i][jj][kk] 
+                            end_date = str(excel[i][jj][kk])
                             start_port = ""
                             start_date = ""
+                            
+                            # print(excel[i][jj][kk], "end_date", end_date)
+                            
+                            if "" != date and len(end_date) < 3:
+                                end_date = date[:6] + end_date
+                                # print("end_date", end_date)
 
                             if "~" in end_date:
                                 tmp = end_date.split('~')
@@ -306,7 +316,7 @@ class parser():
                                 start_date = end_date
                                 
                             seq = seq + 1
-                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq})
+                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq, 'svc':svc})
                             
                             port = end_port
                             date = end_date

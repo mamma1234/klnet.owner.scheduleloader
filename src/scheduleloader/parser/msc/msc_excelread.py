@@ -198,13 +198,14 @@ class parser():
         row_start = j
         row_end = -1
         routes = []
+        svc = ""
         # vessel        voy        port        date
         # print("continue ================> ", i,":",j,":",k)
         # endrow = 0
         # endcol = 0
 
 
-
+        svc = excel[i][j-1][k]
         for kk in range(k, len(excel[i][j])):
 
             # print("merge is:",self.is_merge(j, kk))
@@ -395,7 +396,7 @@ class parser():
                                 start_date = end_date
 
                             seq = seq + 1
-                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq})
+                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq, 'svc':svc})
                             
                             port = end_port
                             date = end_date

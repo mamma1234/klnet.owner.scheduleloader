@@ -195,6 +195,8 @@ class parser():
         row_start = j
         row_end = 0
         routes = []
+        svc_index = -1
+        col_start = -1
         # vessel        voy        port        date
         # print("continue ================> ", i,":",j,":",k)
         # endrow = 0
@@ -251,7 +253,13 @@ class parser():
 
         for jj in range(row_start+1, len(excel[i])):
             outerbreak = False
-            for kk in range(vessel_index, port_end_index):
+
+            if svc_index > -1:
+                col_start = svc_index
+            elif vessel_index > -1:
+                col_start = vessel_index
+
+            for kk in range(col_start, port_end_index):
                 if kk == vessel_index:
                     if "" == str(excel[i][jj][kk]) or None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]) :
                         row_end = jj-1
@@ -286,12 +294,16 @@ class parser():
         try:
             # for jj in range(j+1, len(excel[i])):
             vessel = ""
+            svc = excel[i][row_start-1][col_start]
+            if self._line_code == "MEL":
+                svc = excel[i][row_start-2][col_start]
             for jj in range(row_start+1, row_end+1):
                 outerbreak = False
                 voy = ""
                 port = ""
                 date = ""
                 seq = 0
+                
                 # line_code = "SFK"
                 # print("range:", list(range(len(excel[i][jj]))))
                 print("range:", list(range(vessel_index, port_end_index+1)))
@@ -305,7 +317,7 @@ class parser():
                             if " " in tmp:
                                 tmps = tmp.rsplit(" ", 1)
                                 vessel = tmps[0]
-                                voy = tmps[1]
+                                voy = tmps[1]                                
                                 continue
 
                     if kk == vessel_index:
@@ -370,7 +382,7 @@ class parser():
                                 start_date = end_date
 
                             seq = seq + 1
-                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq})
+                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq, 'svc': svc})
                             
                             port = end_port
                             date = end_date

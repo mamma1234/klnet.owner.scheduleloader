@@ -79,16 +79,21 @@ class parser():
 
     def migration(self, excel):
         # print("length:", len(excel))
+        col_skip = -1
         data = [] #line_code, vessel_name, port_name, 
         for i in range(0, len(excel)):
             for j in range(0, len(excel[i])):
+                col_skip = -1
                 for k in range(0, len(excel[i][j])):
                     # print(i,":",j,":",k,":",excel[i][j][k])
                     try:
+                        if k <= col_skip and col_skip > -1: 
+                            continue                        
                         # 각 선박/항차 별 엑셀 표의 시작 위치
                         if "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+2]):
                             # print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
+                            col_skip = k+2
                     except Exception as identifier:
                         print(identifier)
                         traceback.print_exc()
@@ -99,11 +104,15 @@ class parser():
     def get_routes(self, excel, i, j, k):
         ports = {}
         routes = []
+        svc = ""
+        # svc_index = -1
+        # col_start = -1        
         # vessel        voy        port        date
         # print("continue ================> ", i,":",j,":",k)
         # endrow = 0
         # endcol = 0
 
+        svc = excel[i][j-1][k]
         for kk in range(k+3, len(excel[i][j])):
             # print(i,":",j,":",kk,":",excel[i][j][kk])
             # if "" in str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]):
@@ -116,9 +125,9 @@ class parser():
             if "" == str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]):
                 break
             
-        # print("ports:", ports)
+        print("ports:", ports)
 
-
+        # svc = excel[i][row_start-1][col_start]
         for jj in range(j+1, len(excel[i])):
             try:
                 outerbreak = False
@@ -161,7 +170,7 @@ class parser():
                                 start_date = end_date
                             # print("route:", route)
                             seq = seq + 1
-                            routes.append({'line_code':line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq})
+                            routes.append({'line_code':line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq, 'svc': svc})
 
                             port = end_port
                             date = end_date

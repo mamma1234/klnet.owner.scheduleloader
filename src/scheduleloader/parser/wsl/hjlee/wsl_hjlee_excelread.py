@@ -7,19 +7,19 @@ import traceback
 # from xlrd.xldate.XLDateAmbiguous import XLDateAmbiguous
 
 """
-T. S . LINES LTD.
-    TSL(TSL:TSLU)
+WESTWOOD SHIIPING LINES: HYOP WOON INTERNATIONAL CO.， LTD
+    WSL(WSL:WWSU)
 """
-# _io = 'C:\\KLNET\\12월 9일자 스케줄.xlsx'
+
 
 class parser():
-    _line_code = "TSL"
+    _line_code = "WSL"
     _sheets = []
     _filename = None
     def __init__(self, filename):
         self._filename = filename
     def parsing(self):
-        print("one parsing start")
+        print("parsing start")
         excel = xlrd.open_workbook(self._filename)
 
         # print(len(excel.sheets()))
@@ -35,12 +35,11 @@ class parser():
             # for index, sheet in excel.sheets():
             #     print(sheet.name)
 
-            max_sheet = excel.sheet_by_index(len(excel.sheets())-1)
-            available_name = max_sheet.name
-            available_tmp = (max_sheet.name).split("-", 1)
-            if len(available_tmp) > 1:
-                available_name = available_tmp[0]
-
+            # max_sheet = excel.sheet_by_index(len(excel.sheets())-1)
+            # available_name = max_sheet.name
+            # available_tmp = (max_sheet.name).split("-", 1)
+            # if len(available_tmp) > 1:
+            #     available_name = available_tmp[0]
 
                 # for index, sheet in enumerate(excel.sheet_names):
                 #     print(index, sheet)
@@ -49,8 +48,8 @@ class parser():
             # for sheet_index in range(0, 2):
                 # print("sheet_index:", sheet_index)
                 sheet = excel.sheet_by_index(sheet_index)
-                if available_name not in sheet.name:
-                    continue
+                # if available_name not in sheet.name:
+                #     continue
 
                 print("processing:",sheet.name)
                 
@@ -157,7 +156,7 @@ class parser():
         # print(data[0][3][1])
 
     def migration(self, excel):
-        # print(excel)
+
         print("length:", len(excel))
         col_skip = -1
         data = [] #line_code, vessel_name, port_name, 
@@ -180,7 +179,6 @@ class parser():
 
             for j in range(0, len(excel[i])):
                 col_skip = -1
-                # print(range(0, len(excel[i][j])))
                 for k in range(0, len(excel[i][j])):
                     # print(i,":",j,":",k,":",excel[i][j][k])
                     try:
@@ -188,36 +186,10 @@ class parser():
                         if k <= col_skip and col_skip > -1: 
                             continue
 
-                        if "SVC" in str(excel[i][j][k]) and "VESSEL" in str(excel[i][j][k+1]) and "VOY" in str(excel[i][j][k+2]):
+                        if "VESSEL" in str(excel[i][j][k]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
-                            col_skip = k+2
-                        elif "SVC" in str(excel[i][j][k]) and "VESSEL" in str(excel[i][j][k+1]) and "VOY" in str(excel[i][j][k+3]):
-                            print("start ================> ", i,":",j,":",k)
-                            data.extend(self.get_routes(excel, i,j,k))
-                            col_skip = k+3
-                        elif "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+3]):
-                            print("start ================> ", i,":",j,":",k)
-                            data.extend(self.get_routes(excel, i,j,k))
-                            col_skip = k+3
-                        elif "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+2]):
-                            print("start ================> ", i,":",j,":",k)
-                            data.extend(self.get_routes(excel, i,j,k))
-                            col_skip = k+2
-                        elif "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+1]):
-                            print("start ================> ", i,":",j,":",k)
-                            data.extend(self.get_routes(excel, i,j,k))
-                            col_skip = k+1
-                        elif "Vessel" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+1]):
-                            print("start ================> ", i,":",j,":",k)
-                            data.extend(self.get_routes(excel, i,j,k))
-                            col_skip = k+1
-                        elif "VESSEL / VOYAGE" in str(excel[i][j][k]):
-                            print("start ================> ", i,":",j,":",k)
-                            data.extend(self.get_routes(excel, i,j,k))
-                        elif "VSL/VOY" in str(excel[i][j][k]):
-                            print("start ================> ", i,":",j,":",k)
-                            data.extend(self.get_routes(excel, i,j,k))
+
                     except Exception as identifier:
                         print('migration Exception:',identifier)
                         traceback.print_exc()
@@ -267,59 +239,57 @@ class parser():
 
             # print(">>>",str(excel[i][j][kk]),"<<<<")
 
-            if port_start_index > 0 and ("" == str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk])):
-                port_end_index = kk-1
-                print("end ================> ", i,":",j,":",kk)
-                break
+            # if port_start_index > 0 and ("" == str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk])):
+            #     port_end_index = kk-1
+            #     print("end ================> ", i,":",j,":",kk)
+            #     break
             
-            if port_start_index > 0 and "WEEKLY" in str(excel[i][j][kk]):
-                port_end_index = kk-1
-                print("end ================> ", i,":",j,":",kk)
-                break
+            # if port_start_index > 0 and "WEEKLY" in str(excel[i][j][kk]):
+            #     port_end_index = kk-1
+            #     print("end ================> ", i,":",j,":",kk)
+            #     break
 
-            if port_start_index > 0 and "VESSEL" in str(excel[i][j][kk]):
-                port_end_index = kk-1
-                print("end ================> ", i,":",j,":",kk)
-                break
+            # if port_start_index > 0 and "VESSEL" in str(excel[i][j][kk]):
+            #     port_end_index = kk-1
+            #     print("end ================> ", i,":",j,":",kk)
+            #     break
 
-            if port_start_index > 0 and "Vessel" in str(excel[i][j][kk]):
-                port_end_index = kk-1
-                print("end ================> ", i,":",j,":",kk)
-                break
+            # if port_start_index > 0 and "Vessel" in str(excel[i][j][kk]):
+            #     port_end_index = kk-1
+            #     print("end ================> ", i,":",j,":",kk)
+            #     break
 
 
             if vessel_index > -1 and voy_index > -1 \
-                and "" != str(excel[i][j][kk]) and None != str(excel[i][j][kk]) and "*" not in str(excel[i][j][kk]) \
-                and "VESSEL" not in str(excel[i][j][kk]) and "VOY" not in str(excel[i][j][kk]) \
-                and "Vessel" not in str(excel[i][j][kk]) and "SVC" not in str(excel[i][j][kk]):
+                and (("" != str(excel[i][j][kk]) and None != str(excel[i][j][kk]) and "*" not in str(excel[i][j][kk]) and not self.is_merge_extend(i, j, kk)) \
+                    or self.is_merge_extend(i, j, kk)) \
+                and "VESSEL" not in str(excel[i][j][kk]) :
                 ports[str(kk)] = excel[i][j][kk]
+                if "" != str(excel[i][j+1][kk]) and None != str(excel[i][j+1][kk]):
+                    ports[str(kk)] = excel[i][j+1][kk]
+                
                 if "\n" in ports[str(kk)]:
                     ports[str(kk)] = ports[str(kk)].replace("\n"," ")
                 if port_start_index == -1:
                     port_start_index = kk
 
-            if "VSL/VOY" in str(excel[i][j][kk]):
-                vessel_index = kk
-                voy_index = kk
 
             if "VESSEL" in str(excel[i][j][kk]):
                 vessel_index = kk
-
-            if "Vessel" in str(excel[i][j][kk]):
-                vessel_index = kk
-
-            if "VOY" in str(excel[i][j][kk]):
                 voy_index = kk
 
-            if "SVC" in str(excel[i][j][kk]):
-                svc_index = kk
+
+            if port_start_index > 0 and ("" == str(excel[i][j][kk]) or None == str(excel[i][j][kk]) or "*" in str(excel[i][j][kk]))  and not self.is_merge_extend(i, j, kk):
+                port_end_index = kk-1
+                print("end ================> ", i,":",j,":",kk)
+                break            
 
             if kk == len(excel[i][j])-1:
                 port_end_index = kk
                 print("end ================> ", i,":",j,":",kk)
 
 
-        for jj in range(row_start+1, len(excel[i])):
+        for jj in range(row_start+2, len(excel[i])):
             outerbreak = False
 
             if svc_index > -1:
@@ -410,6 +380,9 @@ class parser():
                             # print("route:", route)
                             continue
 
+
+
+
                     if kk > port_start_index -1 and kk < port_end_index + 1 :
                         # if self.is_merge_extend(i, jj, kk):
                         #     print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",i, jj, kk)
@@ -423,6 +396,10 @@ class parser():
                             start_date = ""
                             # print("original:", date)
                             if "-" == end_date:
+                                continue
+                            if "'-" in end_date:
+                                continue
+                            if "SKIP" in end_date:
                                 continue
 
                             if "~" in end_date:
@@ -451,7 +428,7 @@ class parser():
                                 start_date = end_date
 
                             seq = seq + 1
-                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq, 'svc':svc})
+                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq, 'svc': svc})
 
                             port = end_port
                             date = end_date

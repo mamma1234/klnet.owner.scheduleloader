@@ -14,6 +14,7 @@ from scheduleloader.parser.pil import pil_excelread
 from scheduleloader.parser.msc import msc_excelread
 from scheduleloader.parser.tsl.sally import tsl_sally_excelread
 from scheduleloader.parser.emc import emc_excelread
+from scheduleloader.parser.wsl.hjlee import wsl_hjlee_excelread
 
 def inspection(filepath):
     try:
@@ -27,7 +28,14 @@ def inspection(filepath):
         excel = xlrd.open_workbook(filepath)
 
         if "IMPORT" in temp[1]:
+            return []
+
+        if "IMPORT1" in temp[1]:
             return None
+
+
+        if "mailer-daemon" in temp[0]:
+            return []
 
         if "DHEKim@fesco.com" in temp[0]:
             return feo_excelread.parser
@@ -49,8 +57,10 @@ def inspection(filepath):
             return tsl_sally_excelread.parser
         elif "ellenyoun@evergreen-shipping.co.kr" in temp[0]:
             return emc_excelread.parser
-
-            
+        elif "hjlee@hyopwoon.co.kr" in temp[0]:
+            return wsl_hjlee_excelread.parser
+        elif "inkyu.choi@one-line.com" in temp[0]:
+            return one_excelread.parser
         # elif "custsvc@pus.pilship.com" in temp[0]:
         #     return pil_excelread.parser
         # elif "sally@tslines.co.kr" in temp[0]:

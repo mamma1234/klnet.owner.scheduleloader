@@ -4,6 +4,8 @@ from scheduleloader.parser import distributing
 import datasource
 import shutil
 import os
+import logging
+import logging.handlers
 # from scheduleloader.parser.feo import feo_excelread
 # from pgwrap import db as pgwrap
 
@@ -12,7 +14,25 @@ import os
 #     conn = pgwrap.connection(url='postgres://dev:dev@172.19.1.22:5432/dev')
 #     print(conn)
 
+
+# logging.basicConfig(filename ='./log/test.log', level=logging.DEBUG)
+
+
 def work():
+
+    logger = logging.getLogger("processing")
+    logger.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('[%(levelname)s[%(filename)s:%(lineno)s] %(asctime)s > %(message)s')
+    fileHandler = logging.FileHandler(f"{config._path_log}{os.path.sep}log.log")
+    streamHandler = logging.StreamHandler()
+
+    fileHandler.setFormatter(formatter)
+    streamHandler.setFormatter(formatter)
+
+    logger.addHandler(fileHandler)
+    logger.addHandler(streamHandler)
+
 
     # pool = datasource.simpleconnectionpool()
     filepath = ""
@@ -27,9 +47,11 @@ def work():
             filename = os.path.basename(filepath)
             # print(obj)
             print('----------------------------------------------------------')
-            print("filepath:",filepath)
+            logger.debug("filepath>>" + filepath)
             userclass = distributing.inspection(filepath)
             print("class:",userclass)
+            # if userclass == []:
+            #     print("class:",userclass)
             if userclass is not None:
                 obj = userclass(filepath)
                 data = obj.parsing()
@@ -38,7 +60,7 @@ def work():
 
                 param = obj.migration(data)
 
-                print("param:", param)
+                logger.debug(param)
 
                 # sql = """insert into own_vsl_sch_route(line_code, vsl_name, voyage, route_seq, route_code, eta) 
                 #             values (%(line_code)s,%(vessel)s,%(voy)s,%(seq)s,

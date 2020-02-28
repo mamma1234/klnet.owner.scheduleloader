@@ -259,6 +259,7 @@ class parser():
                 port = ""
                 date = ""
                 seq = 0
+                svc = ""
                 # line_code = "SFK"
                 # print("range:", list(range(len(excel[i][jj]))))
                 print("range:", list(range(vessel_index, port_end_index+1)))
@@ -274,6 +275,8 @@ class parser():
                         #     break
                         if "" != str(excel[i][jj][kk]):
                             vessel = excel[i][jj][kk]
+                            svc = excel[i][jj-1][kk]
+
                     if kk == voy_index:
                         # if "" == str(excel[i][jj][kk]) or None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]):
                         if "" != str(excel[i][jj][kk]):
@@ -310,7 +313,7 @@ class parser():
                                 start_date = end_date
 
                             seq = seq + 1
-                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq})
+                            routes.append({'line_code':self._line_code, 'vessel': vessel, 'voy': voy, 'end_route_name': end_port, 'end_route_date': end_date, 'start_route_name': start_port, 'start_route_date': start_date, 'seq':seq, 'svc': svc})
                             
                             port = end_port
                             date = end_date                

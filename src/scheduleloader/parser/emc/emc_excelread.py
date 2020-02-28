@@ -158,7 +158,7 @@ class parser():
     def migration(self, excel):
 
         print("length:", len(excel))
-        skip = -1
+        col_skip = -1
         data = [] #line_code, vessel_name, port_name, 
         for i in range(0, len(excel)):
 
@@ -178,41 +178,46 @@ class parser():
             # www.mellship.com
 
             for j in range(0, len(excel[i])):
-                skip = -1
+                col_skip = -1
                 for k in range(0, len(excel[i][j])):
                     # print(i,":",j,":",k,":",excel[i][j][k])
                     try:
                         # 각 선박/항차 별 엑셀 표의 시작 위치
-                        if k <= skip and skip > -1: 
+                        if k <= col_skip and col_skip > -1: 
                             continue
 
                         if "SVC" in str(excel[i][j][k]) and "VESSEL" in str(excel[i][j][k+1]) and "VOYAGE" in str(excel[i][j][k+2]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
-                            skip = k+2
+                            col_skip = k+2
                         elif "SERVICE" in str(excel[i][j][k]) and "VESSEL" in str(excel[i][j][k+1]) and "VOYAGE" in str(excel[i][j][k+2]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
-                            skip = k+2
+                            col_skip = k+2
                         elif "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+3]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
-                            skip = k+3
+                            col_skip = k+3
                         elif "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+2]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
+                            col_skip = k+2
                         elif "VESSEL" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+1]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
+                            col_skip = k+1
                         elif "Vessel" in str(excel[i][j][k]) and "VOY" in str(excel[i][j][k+1]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
+                            col_skip = k+1
                         elif "VESSEL" in str(excel[i][j][k]) and "VOY NO." in str(excel[i][j][k+1]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
+                            col_skip = k+1
                         elif "VESSEL" in str(excel[i][j][k]) and "VOYAGE" in str(excel[i][j][k+1]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
+                            col_skip = k+1
                         elif "VESSEL / VOYAGE" in str(excel[i][j][k]):
                             print("start ================> ", i,":",j,":",k)
                             data.extend(self.get_routes(excel, i,j,k))
@@ -292,7 +297,8 @@ class parser():
             if vessel_index > -1 and voy_index > -1 \
                 and "" != str(excel[i][j][kk]) and None != str(excel[i][j][kk]) and "*" not in str(excel[i][j][kk]) \
                 and "VESSEL" not in str(excel[i][j][kk]) and "VOY" not in str(excel[i][j][kk]) \
-                and "Vessel" not in str(excel[i][j][kk]) and "VOY NO." not in str(excel[i][j][kk]) :
+                and "Vessel" not in str(excel[i][j][kk]) and "VOY NO." not in str(excel[i][j][kk]) \
+                and "SERVICE" not in str(excel[i][j][kk]) and "SVC" not in str(excel[i][j][kk]):
                 ports[str(kk)] = excel[i][j][kk]
                 if "\n" in ports[str(kk)]:
                     ports[str(kk)] = ports[str(kk)].replace("\n"," ")
@@ -335,7 +341,7 @@ class parser():
             elif vessel_index > -1:
                 col_start = vessel_index
 
-            for kk in range(svc_index, port_end_index):
+            for kk in range(col_start, port_end_index):
                 if kk == vessel_index:
                     if "" == str(excel[i][jj][kk]) or None == str(excel[i][jj][kk]) or "*" in str(excel[i][jj][kk]) :
                         row_end = jj-1
@@ -435,7 +441,8 @@ class parser():
                             # print("original:", date)
                             if "-" == end_date:
                                 continue
-
+                            if "'-" in end_date:
+                                continue
                             if "SKIP" in end_date:
                                 continue
 
