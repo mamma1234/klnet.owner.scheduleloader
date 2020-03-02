@@ -15,6 +15,13 @@ from scheduleloader.parser.msc import msc_excelread
 from scheduleloader.parser.tsl.sally import tsl_sally_excelread
 from scheduleloader.parser.emc import emc_excelread
 from scheduleloader.parser.wsl.hjlee import wsl_hjlee_excelread
+from scheduleloader.parser.hsd.moon import hsd_moon_excelread
+from scheduleloader.parser.sit import sit_excelread
+from scheduleloader.parser.cma import anl_excelread
+from scheduleloader.parser.cma import cma_excelread
+from scheduleloader.parser.cma import cnc_excelread
+from scheduleloader.parser.tsl import tsl_excelread
+from scheduleloader.parser.hsd import hsd_excelread
 
 def inspection(filepath):
     try:
@@ -53,14 +60,30 @@ def inspection(filepath):
         #     return mel_excelread.parser
         elif "seongjun.cheon@msc.com" in temp[0]:
             return msc_excelread.parser
-        elif "sally@tslines.co.kr" in temp[0]:
-            return tsl_sally_excelread.parser
         elif "ellenyoun@evergreen-shipping.co.kr" in temp[0]:
             return emc_excelread.parser
         elif "hjlee@hyopwoon.co.kr" in temp[0]:
             return wsl_hjlee_excelread.parser
         elif "inkyu.choi@one-line.com" in temp[0]:
             return one_excelread.parser
+        elif "myl@sitckorea.co.kr" in temp[0]:
+            return sit_excelread.parser
+        elif "SEL.IKWON@cma-cgm.com" in temp[0]:
+            print("temp[1]", temp[1])
+            if "ANL" in temp[1]:
+                return anl_excelread.parser
+            elif "CMA" in temp[1]:
+                return cma_excelread.parser
+            elif "CNC" in temp[1]:
+                return cnc_excelread.parser
+        elif "sally@tslines.co.kr" in temp[0]:
+            return tsl_sally_excelread.parser
+        elif "sienna@tslines.co.kr" in temp[0]:
+            return tsl_excelread.parser
+        elif "moon-ju.jung@hamburgsud.com" in temp[0]:
+            return hsd_moon_excelread.parser
+        elif "young-wi.son@hamburgsud.com" in temp[0]:
+            return hsd_excelread.parser
         # elif "custsvc@pus.pilship.com" in temp[0]:
         #     return pil_excelread.parser
         # elif "sally@tslines.co.kr" in temp[0]:
