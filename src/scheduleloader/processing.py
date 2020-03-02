@@ -175,7 +175,7 @@ def success(filepath):
         os.mkdir(topath)
     except Exception as identifier:
         pass
-    # shutil.move(filepath, f"{topath}{os.path.sep}{filename}")
+    shutil.move(filepath, f"{topath}{os.path.sep}{filename}")
 
     
 def fail(filepath):
